@@ -1,0 +1,142 @@
+{
+  "name": "quizz med",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "quiz",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "66a251ca-154e-4627-9a2f-818107d06251",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        -20
+      ],
+      "webhookId": "5fefae78-c23a-4baf-ae33-5abe80c74ca1"
+    },
+    {
+      "parameters": {
+        "functionCode": "\nconst perguntas = [\n  { ID: 1, pergunta: \"Qual órgão produz insulina?\", A: \"Pâncreas\", B: \"Fígado\", C: \"Baço\", D: \"Rim\", correta: \"A\" },\n  { ID: 2, pergunta: \"Qual o principal hormônio da tireoide?\", A: \"TSH\", B: \"T3\", C: \"T4\", D: \"ACTH\", correta: \"C\" },\n  { ID: 3, pergunta: \"Qual estrutura filtra o sangue nos rins?\", A: \"Glomérulo\", B: \"Néfron\", C: \"Alvéolo\", D: \"Capilar\", correta: \"A\" },\n  { ID: 4, pergunta: \"Hemoglobina baixa indica:\", A: \"Anemia\", B: \"Leucemia\", C: \"Hipertensão\", D: \"Diabetes\", correta: \"A\" },\n  { ID: 5, pergunta: \"Qual vitamina é sintetizada pelo sol?\", A: \"B12\", B: \"C\", C: \"D\", D: \"E\", correta: \"C\" },\n  { ID: 6, pergunta: \"Antibiótico usado contra Streptococcus:\", A: \"Amoxicilina\", B: \"Metronidazol\", C: \"Ciprofloxacino\", D: \"Clindamicina\", correta: \"A\" },\n  { ID: 7, pergunta: \"Qual célula produz anticorpos?\", A: \"Macrófago\", B: \"Neutrófilo\", C: \"Linfócito B\", D: \"Eosinófilo\", correta: \"C\" },\n  { ID: 8, pergunta: \"Meningite bacteriana é tratada com:\", A: \"Antiviral\", B: \"Corticoide\", C: \"Antibiótico\", D: \"Antifúngico\", correta: \"C\" },\n  { ID: 9, pergunta: \"Vacina BCG protege contra:\", A: \"Tuberculose\", B: \"Sarampo\", C: \"Tétano\", D: \"Hepatite B\", correta: \"A\" },\n  { ID: 10, pergunta: \"Diabetes tipo 1 envolve:\", A: \"Resistência à insulina\", B: \"Obesidade\", C: \"Autoimunidade\", D: \"Hipertireoidismo\", correta: \"C\" }\n];\n\nconst embaralhadas = perguntas.sort(() => Math.random() - 0.5);\nreturn embaralhadas.slice(0, 5).map(p => ({ json: p }));\n"
+      },
+      "id": "e8e38e95-69a0-495b-8036-80e134eefc6a",
+      "name": "Sortear Perguntas",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        100,
+        -140
+      ]
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "cade7080-42c0-4a12-9f50-c2828c1c9852",
+      "name": "Responder ao Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        540,
+        -80
+      ]
+    },
+    {
+      "parameters": {
+        "fileSelector": "C:\\Users\\Pc-Lenovo\\Downloads\\Questoes_Medicina_Todas_Unificadas_Final.xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.readWriteFile",
+      "typeVersion": 1,
+      "position": [
+        100,
+        60
+      ],
+      "id": "c63ac4e3-d192-40a5-bc03-ba53954ff75e",
+      "name": "Read/Write Files from Disk"
+    },
+    {
+      "parameters": {
+        "operation": "toJson",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        320,
+        0
+      ],
+      "id": "8291570a-d37f-4f4f-9dd1-3e6c617d4e8c",
+      "name": "Convert to File"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Sortear Perguntas",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Read/Write Files from Disk",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sortear Perguntas": {
+      "main": [
+        [
+          {
+            "node": "Responder ao Webhook",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Read/Write Files from Disk": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Responder ao Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "35b6c3b1-867f-42f7-a1c8-b99978793878",
+  "meta": {
+    "instanceId": "0e576e7ec29206cb166c2a30c8e9da7045d96078c4d1517ea64d4829dbf8c1ef"
+  },
+  "id": "kaKftBRlUbdlJ4fz",
+  "tags": []
+}
