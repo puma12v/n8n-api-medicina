@@ -1,5 +1,13 @@
 FROM n8nio/n8n
 
-    ENV GENERIC_TIMEZONE=America/Sao_Paulo
+ENV N8N_BASIC_AUTH_ACTIVE=true
+ENV N8N_BASIC_AUTH_USER=admin
+ENV N8N_BASIC_AUTH_PASSWORD=admin123
+ENV N8N_PORT=5678
+ENV N8N_HOST=0.0.0.0
+ENV WEBHOOK_TUNNEL_URL=https://n8n-api-medicina.onrender.com
+ENV GENERIC_TIMEZONE=America/Sao_Paulo
 
-    CMD ["n8n"]
+EXPOSE 5678
+
+CMD ["n8n"]
